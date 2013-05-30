@@ -1,6 +1,5 @@
 package ru.o2genum.coregame.framework.link;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -16,7 +15,7 @@ import android.app.*;
 import ru.o2genum.coregame.framework.*;
 import ru.o2genum.coregame.R;
 
-public class LinkGameScreen extends Screen {
+public class GameScreen extends Screen {
     long startTime = System.nanoTime();
 	LinkWorld world;
 
@@ -28,7 +27,7 @@ public class LinkGameScreen extends Screen {
 
 	Context r;
         
-    public LinkGameScreen(Game game) {
+    public GameScreen(Game game) {
         super(game);
 		r = (Context) game;
 		world = new LinkWorld(game);	

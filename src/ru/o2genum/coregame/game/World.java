@@ -15,7 +15,7 @@ import android.util.*;
  * I avoided some object creations. However, it doesn't help.
  */
 
-public class LinkWorld
+public class World
 {
 	Random random = new Random();
 	Game game;
@@ -46,7 +46,7 @@ public class LinkWorld
 
 	Sound gameOver;
 
-	public LinkWorld(Game game)
+	public World(Game game)
 	{
 		this.game = game;
 		Graphics g = game.getGraphics();

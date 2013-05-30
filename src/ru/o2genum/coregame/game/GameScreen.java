@@ -18,7 +18,7 @@ import ru.o2genum.coregame.R;
 
 public class GameScreen extends Screen {
     long startTime = System.nanoTime();
-	LinkWorld world;
+	World world;
 
 	Paint paint = new Paint();
 	RectF rect = new RectF();
@@ -30,7 +30,7 @@ public class GameScreen extends Screen {
     public GameScreen(Game game) {
         super(game);
 		r = (Context) game;
-		world = new LinkWorld(game);	
+		world = new World(game);	
 		world.renew();
 		rect.top = world.core.coords.y - world.core.shieldRadius;
 		rect.left = world.core.coords.x - world.core.shieldRadius;
@@ -100,13 +100,13 @@ public class GameScreen extends Screen {
 				dot.maxRadius * dot.energy, paint);
     }
 
-	if(world.state == LinkWorld.GameState.Running)
+	if(world.state == World.GameState.Running)
 		drawMessage(world.getTime(), c);
-	else if(world.state == LinkWorld.GameState.Ready)
+	else if(world.state == World.GameState.Ready)
 		drawMessage(r.getString(R.string.ready), c);
-	else if(world.state == LinkWorld.GameState.Paused)
+	else if(world.state == World.GameState.Paused)
 		drawMessage(r.getString(R.string.paused), c);
-	else if(world.state == LinkWorld.GameState.GameOver)
+	else if(world.state == World.GameState.GameOver)
 		drawMessage(r.getString(R.string.game_over)+
 				"\n"+
 				r.getString(R.string.your_time) +  " " + world.getTime() +
@@ -137,7 +137,7 @@ public class GameScreen extends Screen {
 
     @Override
     public void pause() {
-		world.state = LinkWorld.GameState.Paused;
+		world.state = World.GameState.Paused;
     }
 
     @Override

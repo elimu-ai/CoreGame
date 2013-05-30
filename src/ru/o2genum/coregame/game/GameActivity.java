@@ -5,11 +5,11 @@ import android.graphics.*;
 
 import ru.o2genum.coregame.framework.*;
 import ru.o2genum.coregame.framework.impl.*;
-import ru.o2genum.coregame.framework.link.LinkGameScreen;
+import ru.o2genum.coregame.framework.link.GameScreen;
 
 public class GameActivity extends AndroidGame {
     @Override
     public Screen getStartScreen() {
-        return new LinkGameScreen(this); 
+        return new GameScreen(this); 
     }
 }
