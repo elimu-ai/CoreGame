@@ -1,5 +1,9 @@
 package ru.o2genum.coregame.framework;
 
+import java.util.List;
+
+import android.graphics.Bitmap;
+
 public interface Game
 {
 	public Input getInput();
@@ -17,4 +21,6 @@ public interface Game
 	public Screen getCurrentScreen();
 
 	public Screen getStartScreen();
+	
+	public List<Bitmap> getBitmap();
 }

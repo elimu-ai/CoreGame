@@ -1,4 +1,4 @@
-package ru.o2genum.coregame.game;
+package ru.o2genum.coregame.framework.link;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +16,7 @@ import android.app.*;
 import ru.o2genum.coregame.framework.*;
 import ru.o2genum.coregame.R;
 
-public class GameScreen extends Screen {
+public class LinkGameScreen extends Screen {
     long startTime = System.nanoTime();
 	LinkWorld world;
 
@@ -24,18 +24,15 @@ public class GameScreen extends Screen {
 	RectF rect = new RectF();
 
 	GradientDrawable gradient;
+	
 
 	Context r;
         
-    public GameScreen(Game game) {
+    public LinkGameScreen(Game game) {
         super(game);
 		r = (Context) game;
 		world = new LinkWorld(game);	
 		world.renew();
-		rect.top = world.core.coords.y - world.core.shieldRadius;
-		rect.left = world.core.coords.x - world.core.shieldRadius;
-		rect.bottom = world.core.coords.y + world.core.shieldRadius;
-		rect.right = world.core.coords.x + world.core.shieldRadius;
 
 		paint.setAntiAlias(true);
 		paint.setStrokeWidth(0.0F);
@@ -52,6 +49,7 @@ public class GameScreen extends Screen {
 		
 		paint.setTextSize(((float)game.getGraphics().getHeight()) / 16F);
 		paint.setTextAlign(Paint.Align.CENTER);
+	
     }
     
     @Override
@@ -62,42 +60,23 @@ public class GameScreen extends Screen {
     @Override
     public void present(float deltaTime) {
     Canvas c = game.getGraphics().getCanvas();    
+
 	gradient.draw(c);
 	paint.setStyle(Paint.Style.FILL_AND_STROKE);
-	if(world.core.shieldEnergy > 0.0F)
-	{
-		paint.setColor(0xff003cca);
-		paint.setAlpha((int) (80.0F +
-				   	(255.0F - 80.0F) * world.core.shieldEnergy));
-		c.drawCircle(world.core.coords.x, world.core.coords.y,
-			world.core.shieldRadius, paint);
-		paint.setAlpha(255);
-	}
+	
 	paint.setColor(0xff19dbe2);
-	c.drawCircle(world.core.coords.x, world.core.coords.y,
-		   	world.core.maxRadius * world.core.health,
-			paint);
+
 	paint.setStyle(Paint.Style.STROKE);
 	paint.setColor(0xffffffff);
-	paint.setStrokeWidth(Core.SHIELD_WIDTH);
-	c.drawArc(rect, (360.0F - world.core.angle),
-			(360.0F - world.core.GAP_ANGLE), false, paint);
 	paint.setStrokeWidth(0.0F);
 	paint.setStyle(Paint.Style.FILL_AND_STROKE);
-	Iterator<Dot> iterator = world.dots.iterator();
+	Iterator<LinkItem> iterator = world.linkItems.iterator();
 	while(iterator.hasNext())
 	{
 		int color = 0;
-		Dot dot = iterator.next();
-		if(dot.type == Dot.Type.Enemy)
-			color = 0xffe2192e;
-		else if(dot.type == Dot.Type.Health)
-			color = 0xff19dbe2;
-		else if(dot.type == Dot.Type.Shield)
-			color = 0xff003cca;
-		paint.setColor(color);
-		c.drawCircle(dot.coords.x, dot.coords.y,
-				dot.maxRadius * dot.energy, paint);
+		LinkItem linkitem = iterator.next();
+		c.drawBitmap(linkitem.GetBitmap(), linkitem.GetPointF().x, linkitem.GetPointF().y , paint);
+
     }
 
 	if(world.state == LinkWorld.GameState.Running)

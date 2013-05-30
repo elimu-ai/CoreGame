@@ -1,17 +1,22 @@
 package ru.o2genum.coregame.framework.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.view.Window;
 import android.view.WindowManager;
 
+import ru.o2genum.coregame.R;
 import ru.o2genum.coregame.framework.*;
 
 public abstract class AndroidGame extends Activity implements Game
@@ -23,6 +28,7 @@ public abstract class AndroidGame extends Activity implements Game
 	FileIO fileIO;
 	Vibration vibration;
 	Screen screen;
+	List<Bitmap> bitmaps;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -38,6 +44,8 @@ public abstract class AndroidGame extends Activity implements Game
 					getWindowManager().getDefaultDisplay().getWidth(),
 					getWindowManager().getDefaultDisplay().getHeight(),
 					Config.RGB_565);
+
+		InitBitmap();
 		renderView = new AndroidFastRenderView(this, frameBuffer);
 		graphics = new AndroidGraphics(frameBuffer);
 		fileIO = new AndroidFileIO(getAssets());
@@ -46,11 +54,16 @@ public abstract class AndroidGame extends Activity implements Game
 		vibration = new AndroidVibration(this);
 		screen = getStartScreen();
 		setContentView(renderView);
-
 		PowerManager powerManager = 
 			(PowerManager) getSystemService(Context.POWER_SERVICE);
 	}
 
+	private void InitBitmap()
+	{
+		bitmaps = new ArrayList<Bitmap>();
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1001));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1002)); 
+	}
 	@Override
 	public void onResume()
 	{
@@ -115,5 +128,10 @@ public abstract class AndroidGame extends Activity implements Game
 	public Vibration getVibration()
 	{
 		return vibration;
+	}
+	
+	public List<Bitmap> getBitmap()
+	{
+		return bitmaps;
 	}
 }
