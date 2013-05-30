@@ -60,8 +60,9 @@ public class GameScreen extends Screen {
     public void present(float deltaTime) {
     Canvas c = game.getGraphics().getCanvas();    
 
-	gradient.draw(c);
-	paint.setStyle(Paint.Style.FILL_AND_STROKE);
+//	gradient.draw(c);
+	c.drawBitmap(game.getBackGroud(), null, new Rect(0,0,c.getWidth(),c.getHeight()), paint);
+    paint.setStyle(Paint.Style.FILL_AND_STROKE);
 	
 	paint.setColor(0xff19dbe2);
 
@@ -70,11 +71,16 @@ public class GameScreen extends Screen {
 	paint.setStrokeWidth(0.0F);
 	paint.setStyle(Paint.Style.FILL_AND_STROKE);
 	Iterator<LinkItem> iterator = world.linkItems.iterator();
+	int bitmapWidth = (c.getWidth() - 15)/10;
 	while(iterator.hasNext())
 	{
 		int color = 0;
 		LinkItem linkitem = iterator.next();
-		c.drawBitmap(linkitem.GetBitmap(), linkitem.GetPointF().x, linkitem.GetPointF().y , paint);
+		Bitmap bitmap = linkitem.GetBitmap();
+		bitmap = Bitmap.createScaledBitmap(bitmap,  bitmapWidth, bitmapWidth, true);
+		int x = 1 + (bitmapWidth + 2 ) * linkitem.GetIndex().x;
+		int y = 1 + (bitmapWidth + 2 ) * linkitem.GetIndex().y;;
+		c.drawBitmap(bitmap ,x,y, paint);
 
     }
 

@@ -29,6 +29,7 @@ public abstract class AndroidGame extends Activity implements Game
 	Vibration vibration;
 	Screen screen;
 	List<Bitmap> bitmaps;
+	Bitmap backgroud;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -63,7 +64,20 @@ public abstract class AndroidGame extends Activity implements Game
 		bitmaps = new ArrayList<Bitmap>();
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1001));
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1002)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1003)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1004)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1005)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1006)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1007)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1008)); 
+
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1009)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1010)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1011)); 
+		
+		backgroud = BitmapFactory.decodeResource(this.getResources(),R.drawable.backgroud);
 	}
+	
 	@Override
 	public void onResume()
 	{
@@ -133,5 +147,10 @@ public abstract class AndroidGame extends Activity implements Game
 	public List<Bitmap> getBitmap()
 	{
 		return bitmaps;
+	}
+	
+	public Bitmap getBackGroud()
+	{
+		return backgroud;
 	}
 }

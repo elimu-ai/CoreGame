@@ -23,4 +23,6 @@ public interface Game
 	public Screen getStartScreen();
 	
 	public List<Bitmap> getBitmap();
+	
+	public Bitmap getBackGroud();
 }

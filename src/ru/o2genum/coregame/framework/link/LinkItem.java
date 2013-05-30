@@ -2,6 +2,7 @@ package ru.o2genum.coregame.framework.link;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.graphics.PointF;
 import ru.o2genum.coregame.framework.link.Utility.LinkItemType;
 
@@ -9,18 +10,17 @@ public class LinkItem {
 
 	private LinkItemType type = LinkItemType.T0;
 	
-	private int index = -1;
+	private Point index ;
 	
 	private Bitmap bitmap;
 
-	private PointF pointF = new PointF(100,100);
+	private Point pointF = new Point(100,100);
 	
-	public LinkItem(LinkItemType type, int index, Bitmap bitmap)
+	public LinkItem(LinkItemType type, Point index, Bitmap bitmap)
 	{
 		this.type = type;
 		this.index = index;
 		this.bitmap = bitmap;
-		
 	}
 	
 	public LinkItemType GetLinkItemType()
@@ -28,19 +28,9 @@ public class LinkItem {
 		return type;
 	}
 	
-	public int GetIndex()
+	public Point GetIndex()
 	{
 		return this.index;
-	}
-	
-	public void SetPointF(PointF pointF)
-	{
-		this.pointF = pointF;
-	}
-	
-	public PointF GetPointF()
-	{
-		return this.pointF;
 	}
 	
 	public Bitmap GetBitmap()

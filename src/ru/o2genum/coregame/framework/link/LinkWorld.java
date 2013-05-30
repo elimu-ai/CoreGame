@@ -14,6 +14,7 @@ import ru.o2genum.coregame.game.Dot;
 import ru.o2genum.coregame.game.VectorF;
 
 import android.graphics.Matrix;
+import android.graphics.Point;
 import android.util.*;
 
 /* I should have used pools for my objects not to make garbage
@@ -206,9 +207,11 @@ public class LinkWorld
 		
 		}
 
-		LinkItem item = new LinkItem(LinkItemType.T0,0,game.getBitmap().get(0));
+		linkItems.add(new LinkItem(LinkItemType.T0,new Point(0,0),game.getBitmap().get(0)));
+		linkItems.add(new LinkItem(LinkItemType.T0,new Point(0,1),game.getBitmap().get(1)));
+		linkItems.add(new LinkItem(LinkItemType.T0,new Point(1,0),game.getBitmap().get(2)));
+		linkItems.add(new LinkItem(LinkItemType.T0,new Point(1,1),game.getBitmap().get(3)));
 
-		linkItems.add(item);
 	}
 
 	private void countTime(float deltaTime)
