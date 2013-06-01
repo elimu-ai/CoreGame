@@ -13,6 +13,8 @@ public class LinkItem {
 	private Point index ;
 	
 	private Bitmap bitmap;
+	
+	public boolean isSelect = false;
 
 	private Point pointF = new Point(100,100);
 	

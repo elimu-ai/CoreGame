@@ -30,6 +30,7 @@ public abstract class AndroidGame extends Activity implements Game
 	Screen screen;
 	List<Bitmap> bitmaps;
 	Bitmap backgroud;
+	Bitmap selectBackgroud;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -74,8 +75,9 @@ public abstract class AndroidGame extends Activity implements Game
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1009)); 
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1010)); 
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1011)); 
-		
+
 		backgroud = BitmapFactory.decodeResource(this.getResources(),R.drawable.backgroud);
+		selectBackgroud = BitmapFactory.decodeResource(this.getResources(),R.drawable.selectbackground);
 	}
 	
 	@Override
@@ -153,4 +155,10 @@ public abstract class AndroidGame extends Activity implements Game
 	{
 		return backgroud;
 	}
+
+	public Bitmap getSelectBackGroud()
+	{
+		return selectBackgroud;
+	}
 }
+	

@@ -15,7 +15,7 @@ import android.app.*;
 import ru.o2genum.coregame.framework.*;
 import ru.o2genum.coregame.R;
 
-public class GameScreen extends Screen {
+public class LinkGameScreen extends Screen {
     long startTime = System.nanoTime();
 	LinkWorld world;
 
@@ -24,10 +24,11 @@ public class GameScreen extends Screen {
 
 	GradientDrawable gradient;
 	
+	private int _edge = 2;
 
 	Context r;
         
-    public GameScreen(Game game) {
+    public LinkGameScreen(Game game) {
         super(game);
 		r = (Context) game;
 		world = new LinkWorld(game);	
@@ -35,17 +36,7 @@ public class GameScreen extends Screen {
 
 		paint.setAntiAlias(true);
 		paint.setStrokeWidth(0.0F);
-		
-		// This gradient looks quite smooth, but not perfect
-		gradient = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
-				new int[]{0xff001319, 0xff013e3f});
-		gradient.setGradientType(GradientDrawable.RADIAL_GRADIENT);
-		gradient.setGradientRadius((int) world.offScreenRadius);
-		gradient.setDither(false);
-		gradient.setGradientCenter(0.5F, 0.5F);
-		gradient.setBounds(new Rect(0, 0, game.getGraphics().getWidth(),
-				   	game.getGraphics().getHeight()));
-		
+			
 		paint.setTextSize(((float)game.getGraphics().getHeight()) / 16F);
 		paint.setTextAlign(Paint.Align.CENTER);
 	
@@ -71,18 +62,24 @@ public class GameScreen extends Screen {
 	paint.setStrokeWidth(0.0F);
 	paint.setStyle(Paint.Style.FILL_AND_STROKE);
 	Iterator<LinkItem> iterator = world.linkItems.iterator();
-	int bitmapWidth = (c.getWidth() - 15)/10;
+	int bitmapWidth = (c.getWidth() - (2 * _edge + (Utility._horizontalLinkItemCount) * _edge))/Utility._horizontalLinkItemCount;
+
+	Bitmap selectedBackGround= Bitmap.createScaledBitmap(game.getSelectBackGroud(),  bitmapWidth, bitmapWidth, true);
 	while(iterator.hasNext())
 	{
 		int color = 0;
 		LinkItem linkitem = iterator.next();
 		Bitmap bitmap = linkitem.GetBitmap();
 		bitmap = Bitmap.createScaledBitmap(bitmap,  bitmapWidth, bitmapWidth, true);
-		int x = 1 + (bitmapWidth + 2 ) * linkitem.GetIndex().x;
-		int y = 1 + (bitmapWidth + 2 ) * linkitem.GetIndex().y;;
+		int x = Utility._edge + (bitmapWidth + Utility._edge ) * linkitem.GetIndex().x;
+		int y = Utility._edge + (bitmapWidth + Utility._edge ) * linkitem.GetIndex().y;;
+		if(linkitem.isSelect)
+		{
+				c.drawBitmap(selectedBackGround, x,y, paint);
+		}
+		
 		c.drawBitmap(bitmap ,x,y, paint);
-
-    }
+	}
 
 	if(world.state == LinkWorld.GameState.Running)
 		drawMessage(world.getTime(), c);

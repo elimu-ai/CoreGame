@@ -25,4 +25,6 @@ public interface Game
 	public List<Bitmap> getBitmap();
 	
 	public Bitmap getBackGroud();
+	
+	public Bitmap getSelectBackGroud();
 }
