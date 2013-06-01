@@ -10,6 +10,8 @@ public class Utility {
 	}
 	
 	public static int  _horizontalLinkItemCount = 9;
-	public static int  _verticalLinkItemCount = 14;
+	public static int  _verticalLinkItemCount = 12;
 	public static int _edge = 2;
+	
+	public static int _borderEdge = 10;
 }

@@ -3,20 +3,11 @@ package ru.o2genum.coregame.framework.link;
 import java.util.*;
 
 import ru.o2genum.coregame.framework.*;
-import ru.o2genum.coregame.framework.impl.*;
-import ru.o2genum.coregame.framework.link.Utility.GameLevel;
 import ru.o2genum.coregame.framework.link.Utility.LinkItemType;
-import ru.o2genum.coregame.framework.Pool.PoolObjectFactory;
 import ru.o2genum.coregame.framework.Input.KeyEvent;
 import ru.o2genum.coregame.framework.Input.TouchEvent;
-import ru.o2genum.coregame.game.Core;
-import ru.o2genum.coregame.game.Dot;
-import ru.o2genum.coregame.game.VectorF;
-
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Point;
-import android.util.*;
 
 /* I should have used pools for my objects not to make garbage
  * collector angry. As it freezes the game sometimes, 
@@ -26,10 +17,10 @@ import android.util.*;
 public class LinkWorld {
 	Random random = new Random();
 	Game game;
-	private final int DOTS_COUNT = 10;
 	// In this case ArrayList is better than LinkedList:
 	// list will never be resized.
-	public List<LinkItem> linkItems = new ArrayList<LinkItem>(DOTS_COUNT);
+
+	Map<Point, LinkItem> map = new HashMap<Point, LinkItem>();
 
 	private float time = 0.0F; // in seconds
 
@@ -65,10 +56,10 @@ public class LinkWorld {
 
 	// Restart the game
 	public void renew() {
-		linkItems.clear();
+		map.clear();
 		time = 0.0F;
 		state = GameState.Ready;
-		generateNewDot();
+		generateNewLinkGame();
 	}
 
 	public void update(float deltaTime) {
@@ -86,17 +77,18 @@ public class LinkWorld {
 		if (game.getInput().isTouchDown()) {
 			int touchX = game.getInput().getTouchX();
 			int touchY = game.getInput().getTouchY();
-		    Canvas c = game.getGraphics().getCanvas();    
-			int bitmapWidth = (c.getWidth() - (2 * Utility._edge + (Utility._horizontalLinkItemCount) * Utility._edge))/Utility._horizontalLinkItemCount;
+			Canvas c = game.getGraphics().getCanvas();
+			int bitmapWidth = (c.getWidth() - (Utility._edge + (Utility._horizontalLinkItemCount)
+					* Utility._edge))
+					/ Utility._horizontalLinkItemCount;
 
-			int x = touchX / (Utility._horizontalLinkItemCount + Utility._edge + bitmapWidth);
-			int y = touchY / (Utility._horizontalLinkItemCount + Utility._edge + bitmapWidth);
+			int x = touchX / (Utility._edge + bitmapWidth);
+			int y = touchY / (Utility._edge + bitmapWidth);
 
-			Iterator<LinkItem> iterator = linkItems.iterator();
+			Iterator<LinkItem> iterator = map.values().iterator();
 			while (iterator.hasNext()) {
 				LinkItem linkitem = iterator.next();
-				if(linkitem.GetIndex().x == x && linkitem.GetIndex().y == y)
-				{
+				if (linkitem.GetIndex().x == x && linkitem.GetIndex().y == y) {
 					linkitem.isSelect = true;
 					break;
 				}
@@ -105,7 +97,7 @@ public class LinkWorld {
 		} else {
 		}
 	}
-	
+
 	private void updateReady(float deltaTime) {
 		if (checkTouchUp() || checkMenuUp())
 			state = GameState.Running;
@@ -150,13 +142,64 @@ public class LinkWorld {
 
 		doInput();
 	}
-	
-	private void generateNewDot() {
-		for (int i = 0; i < Utility._horizontalLinkItemCount; i++) {
-			for (int j = 0; j < Utility._verticalLinkItemCount; j++) {
-				linkItems.add(new LinkItem(LinkItemType.T0, new Point(i, j),
-						game.getBitmap().get(0)));
+
+	private void generateNewLinkGame() {
+		int itemTypeCount = 10;
+
+		while (map.size() < Utility._horizontalLinkItemCount
+				* Utility._verticalLinkItemCount) {
+			if (itemTypeCount < 0) {
+				itemTypeCount = 10;
 			}
+			LinkItemType itemType = getLinkItemType(itemTypeCount);
+
+			for (int t = 0; t < 2; t++) {
+
+				while (true) {
+
+					int x = random.nextInt(Utility._horizontalLinkItemCount);
+					int y = random.nextInt(Utility._verticalLinkItemCount);
+					Point point = new Point(x, y);
+					if (!map.containsKey(point)) {
+						map.put(point, new LinkItem(itemType, point, game
+								.getBitmap().get(itemTypeCount)));
+						break;
+					}
+				}
+			}
+
+			itemTypeCount--;
+		}
+
+	}
+
+	private LinkItemType getLinkItemType(int type) {
+		switch (type) {
+		case 0:
+			return LinkItemType.T0;
+		case 1:
+			return LinkItemType.T1;
+		case 2:
+			return LinkItemType.T2;
+		case 3:
+			return LinkItemType.T3;
+		case 4:
+			return LinkItemType.T4;
+		case 5:
+			return LinkItemType.T5;
+		case 6:
+			return LinkItemType.T6;
+		case 7:
+			return LinkItemType.T7;
+		case 8:
+			return LinkItemType.T8;
+		case 9:
+			return LinkItemType.T9;
+		case 10:
+			return LinkItemType.T10;
+
+		default:
+			return LinkItemType.T0;
 		}
 	}
 

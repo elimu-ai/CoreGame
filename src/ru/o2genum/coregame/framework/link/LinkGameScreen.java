@@ -22,10 +22,6 @@ public class LinkGameScreen extends Screen {
 	Paint paint = new Paint();
 	RectF rect = new RectF();
 
-	GradientDrawable gradient;
-	
-	private int _edge = 2;
-
 	Context r;
         
     public LinkGameScreen(Game game) {
@@ -61,18 +57,17 @@ public class LinkGameScreen extends Screen {
 	paint.setColor(0xffffffff);
 	paint.setStrokeWidth(0.0F);
 	paint.setStyle(Paint.Style.FILL_AND_STROKE);
-	Iterator<LinkItem> iterator = world.linkItems.iterator();
-	int bitmapWidth = (c.getWidth() - (2 * _edge + (Utility._horizontalLinkItemCount) * _edge))/Utility._horizontalLinkItemCount;
+	Iterator<LinkItem> iterator = world.map.values().iterator();
+	int bitmapWidth = (c.getWidth() - (Utility._borderEdge * 2 + (Utility._horizontalLinkItemCount - 1) * Utility._edge))/Utility._horizontalLinkItemCount;
 
 	Bitmap selectedBackGround= Bitmap.createScaledBitmap(game.getSelectBackGroud(),  bitmapWidth, bitmapWidth, true);
 	while(iterator.hasNext())
 	{
-		int color = 0;
 		LinkItem linkitem = iterator.next();
 		Bitmap bitmap = linkitem.GetBitmap();
 		bitmap = Bitmap.createScaledBitmap(bitmap,  bitmapWidth, bitmapWidth, true);
-		int x = Utility._edge + (bitmapWidth + Utility._edge ) * linkitem.GetIndex().x;
-		int y = Utility._edge + (bitmapWidth + Utility._edge ) * linkitem.GetIndex().y;;
+		int x = Utility._borderEdge + Utility._edge + (bitmapWidth + Utility._edge ) * linkitem.GetIndex().x;
+		int y = Utility._borderEdge + Utility._edge + (bitmapWidth + Utility._edge ) * linkitem.GetIndex().y;;
 		if(linkitem.isSelect)
 		{
 				c.drawBitmap(selectedBackGround, x,y, paint);
