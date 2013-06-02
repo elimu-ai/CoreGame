@@ -4,6 +4,7 @@ import java.util.*;
 
 import ru.o2genum.coregame.framework.*;
 import ru.o2genum.coregame.framework.link.Utility.LinkItemType;
+import ru.o2genum.coregame.framework.link.Utility.LinkWayTurn;
 import ru.o2genum.coregame.framework.Input.KeyEvent;
 import ru.o2genum.coregame.framework.Input.TouchEvent;
 import android.graphics.Canvas;
@@ -73,6 +74,10 @@ public class LinkWorld {
 			updateGameOver(deltaTime);
 	}
 
+	private LinkItem previouseSelected;
+
+	private LinkWay linkWay;
+
 	private void doInput() {
 		if (game.getInput().isTouchDown()) {
 			int touchX = game.getInput().getTouchX();
@@ -88,12 +93,28 @@ public class LinkWorld {
 			Iterator<LinkItem> iterator = map.values().iterator();
 			while (iterator.hasNext()) {
 				LinkItem linkitem = iterator.next();
+
 				if (linkitem.GetIndex().x == x && linkitem.GetIndex().y == y) {
 					linkitem.isSelect = true;
-					break;
+					if (previouseSelected == null) {
+						previouseSelected = linkitem;
+					} else {
+						linkWay = FindWay(previouseSelected.GetIndex(),
+								linkitem.GetIndex());
+						if (linkWay.getWaySize() >= 2) {
+							previouseSelected.isSelect = true;
+						} else {
+							previouseSelected = linkitem;
+						}
+					}
+				} else {
+					linkitem.isSelect = false;
 				}
 			}
 
+			if (previouseSelected != null) {
+				previouseSelected.isSelect = true;
+			}
 		} else {
 		}
 	}
@@ -173,6 +194,100 @@ public class LinkWorld {
 
 	}
 
+	private LinkWay FindWay(Point start, Point end) {
+		LinkWay result = new LinkWay();
+
+		if (map.get(start).GetLinkItemType() == map.get(end).GetLinkItemType()) {
+			FindWay(start, end, result, -1, LinkWayTurn.none);
+		}
+
+		return result;
+	}
+
+	private boolean FindWay(Point start, Point end, LinkWay linkway,
+			int turnCount, LinkWayTurn wayTurn) {
+		linkway.AddPointToEnd(start);
+		if (start.x == end.x && start.y == end.y) {
+			return true;
+		}
+
+		if (map.containsKey(start) && wayTurn != LinkWayTurn.none) {
+			linkway.RemovePointFromEnd();
+			return false;
+		}
+
+		if (turnCount > 2) {
+			linkway.RemovePointFromEnd();
+			return false;
+		}
+
+		if (start.x < -1 || start.x > Utility._horizontalLinkItemCount + 1
+				|| start.y < -1 || start.y > Utility._verticalLinkItemCount + 1) {
+			linkway.RemovePointFromEnd();
+			return false;
+		}
+
+		Point next;
+
+		next = GenerateNextPoint(start, LinkWayTurn.up);
+
+		if (FindWay(next, end, linkway, wayTurn == LinkWayTurn.up ? turnCount
+				: turnCount++, wayTurn == LinkWayTurn.none ? LinkWayTurn.up
+				: wayTurn)) {
+			return true;
+		}
+		next = GenerateNextPoint(start, LinkWayTurn.down);
+
+		if (FindWay(next, end, linkway, wayTurn == LinkWayTurn.down ? turnCount
+				: turnCount++, wayTurn == LinkWayTurn.none ? LinkWayTurn.down
+				: wayTurn)) {
+			return true;
+		}
+
+		next = GenerateNextPoint(start, LinkWayTurn.left);
+		if (FindWay(next, end, linkway, wayTurn == LinkWayTurn.left ? turnCount
+				: turnCount++, wayTurn == LinkWayTurn.none ? LinkWayTurn.left
+				: wayTurn)) {
+			return true;
+		}
+		next = GenerateNextPoint(start, LinkWayTurn.right);
+
+		if (FindWay(next, end, linkway,
+				wayTurn == LinkWayTurn.right ? turnCount : turnCount++,
+				wayTurn == LinkWayTurn.none ? LinkWayTurn.right : wayTurn)) {
+			return true;
+		}
+		
+		linkway.RemovePointFromEnd();
+
+		return false;
+	}
+
+	private Point GenerateNextPoint(Point point, LinkWayTurn wayTurn) {
+		Point next = new Point(point.x, point.y);
+		switch (wayTurn) {
+		case down:
+			next = new Point(point.x, point.y + 1);
+			break;
+		case up:
+
+			next = new Point(point.x, point.y - 1);
+			break;
+		case left:
+
+			next = new Point(point.x - 1, point.y);
+			break;
+		case right:
+
+			next = new Point(point.x + 1, point.y);
+			break;
+		default:
+			break;
+		}
+
+		return next;
+	}
+
 	private LinkItemType getLinkItemType(int type) {
 		switch (type) {
 		case 0:
@@ -216,5 +331,9 @@ public class LinkWorld {
 			result += minutes + ":";
 		result += String.format("%02d", seconds);
 		return result;
+	}
+
+	public LinkWay getLinkWay() {
+		return linkWay;
 	}
 }

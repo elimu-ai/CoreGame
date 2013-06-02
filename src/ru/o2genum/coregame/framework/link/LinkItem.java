@@ -15,8 +15,6 @@ public class LinkItem {
 	private Bitmap bitmap;
 	
 	public boolean isSelect = false;
-
-	private Point pointF = new Point(100,100);
 	
 	public LinkItem(LinkItemType type, Point index, Bitmap bitmap)
 	{

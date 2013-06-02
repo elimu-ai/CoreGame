@@ -43,7 +43,10 @@ public class LinkGameScreen extends Screen {
 		world.update(deltaTime);
     }
 
-    @Override
+
+	private Point selectedPoint ;
+	
+	@Override
     public void present(float deltaTime) {
     Canvas c = game.getGraphics().getCanvas();    
 
@@ -76,6 +79,12 @@ public class LinkGameScreen extends Screen {
 		c.drawBitmap(bitmap ,x,y, paint);
 	}
 
+	LinkWay linkWay = world.getLinkWay();
+	if(linkWay != null)
+	{
+		linkWay .DrawTheWay(c, paint, bitmapWidth);
+	}
+	
 	if(world.state == LinkWorld.GameState.Running)
 		drawMessage(world.getTime(), c);
 	else if(world.state == LinkWorld.GameState.Ready)
