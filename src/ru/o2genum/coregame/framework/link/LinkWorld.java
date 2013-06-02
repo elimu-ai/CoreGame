@@ -75,7 +75,7 @@ public class LinkWorld {
 	}
 
 	private LinkItem previouseSelected;
-
+	private LinkItem currectSelected;
 	private LinkWay linkWay;
 
 	private void doInput() {
@@ -99,10 +99,13 @@ public class LinkWorld {
 					if (previouseSelected == null) {
 						previouseSelected = linkitem;
 					} else {
+						if(previouseSelected != null)
+						{
 						linkWay = FindWay(previouseSelected.GetIndex(),
 								linkitem.GetIndex());
+						}
 						if (linkWay.getWaySize() >= 2) {
-							previouseSelected.isSelect = true;
+							currectSelected = linkitem;
 						} else {
 							previouseSelected = linkitem;
 						}
@@ -110,6 +113,13 @@ public class LinkWorld {
 				} else {
 					linkitem.isSelect = false;
 				}
+			}
+			if (linkWay != null && linkWay.getWaySize() >= 2) {
+				map.remove(previouseSelected.GetIndex());
+				map.remove(currectSelected.GetIndex());
+				previouseSelected = null;
+				currectSelected = null;
+				linkWay = null;
 			}
 
 			if (previouseSelected != null) {
@@ -257,7 +267,7 @@ public class LinkWorld {
 				wayTurn == LinkWayTurn.none ? LinkWayTurn.right : wayTurn)) {
 			return true;
 		}
-		
+
 		linkway.RemovePointFromEnd();
 
 		return false;
