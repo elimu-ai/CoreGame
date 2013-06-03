@@ -99,10 +99,9 @@ public class LinkWorld {
 					if (previouseSelected == null) {
 						previouseSelected = linkitem;
 					} else {
-						if(previouseSelected != null)
-						{
-						linkWay = FindWay(previouseSelected.GetIndex(),
-								linkitem.GetIndex());
+						if (previouseSelected != null) {
+							linkWay = FindWay(previouseSelected.GetIndex(),
+									linkitem.GetIndex());
 						}
 						if (linkWay.getWaySize() >= 2) {
 							currectSelected = linkitem;
@@ -208,7 +207,7 @@ public class LinkWorld {
 		LinkWay result = new LinkWay();
 
 		if (map.get(start).GetLinkItemType() == map.get(end).GetLinkItemType()) {
-			FindWay(start, end, result, -1, LinkWayTurn.none);
+			FindWay(start, end, result, 0, LinkWayTurn.none);
 		}
 
 		return result;
@@ -239,35 +238,45 @@ public class LinkWorld {
 
 		Point next;
 
-		next = GenerateNextPoint(start, LinkWayTurn.up);
+		if (wayTurn != LinkWayTurn.down) {
+			next = GenerateNextPoint(start, LinkWayTurn.up);
 
-		if (FindWay(next, end, linkway, wayTurn == LinkWayTurn.up ? turnCount
-				: turnCount++, wayTurn == LinkWayTurn.none ? LinkWayTurn.up
-				: wayTurn)) {
-			return true;
-		}
-		next = GenerateNextPoint(start, LinkWayTurn.down);
-
-		if (FindWay(next, end, linkway, wayTurn == LinkWayTurn.down ? turnCount
-				: turnCount++, wayTurn == LinkWayTurn.none ? LinkWayTurn.down
-				: wayTurn)) {
-			return true;
+			if (FindWay(next, end, linkway,
+					wayTurn == LinkWayTurn.up ? turnCount : turnCount + 1,
+					LinkWayTurn.up)) {
+				return true;
+			}
 		}
 
-		next = GenerateNextPoint(start, LinkWayTurn.left);
-		if (FindWay(next, end, linkway, wayTurn == LinkWayTurn.left ? turnCount
-				: turnCount++, wayTurn == LinkWayTurn.none ? LinkWayTurn.left
-				: wayTurn)) {
-			return true;
-		}
-		next = GenerateNextPoint(start, LinkWayTurn.right);
+		if (wayTurn != LinkWayTurn.up) {
+			next = GenerateNextPoint(start, LinkWayTurn.down);
 
-		if (FindWay(next, end, linkway,
-				wayTurn == LinkWayTurn.right ? turnCount : turnCount++,
-				wayTurn == LinkWayTurn.none ? LinkWayTurn.right : wayTurn)) {
-			return true;
+			if (FindWay(next, end, linkway,
+					wayTurn == LinkWayTurn.down ? turnCount : turnCount + 1,
+					LinkWayTurn.down)) {
+				return true;
+			}
 		}
 
+		if (wayTurn != LinkWayTurn.right) {
+
+			next = GenerateNextPoint(start, LinkWayTurn.left);
+			if (FindWay(next, end, linkway,
+					wayTurn == LinkWayTurn.left ? turnCount : turnCount + 1,
+					LinkWayTurn.left)) {
+				return true;
+			}
+		}
+		if (wayTurn != LinkWayTurn.left) {
+
+			next = GenerateNextPoint(start, LinkWayTurn.right);
+
+			if (FindWay(next, end, linkway,
+					wayTurn == LinkWayTurn.right ? turnCount : turnCount + 1,
+					LinkWayTurn.right)) {
+				return true;
+			}
+		}
 		linkway.RemovePointFromEnd();
 
 		return false;
