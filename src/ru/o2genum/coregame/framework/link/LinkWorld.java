@@ -7,8 +7,10 @@ import ru.o2genum.coregame.framework.link.Utility.LinkItemType;
 import ru.o2genum.coregame.framework.link.Utility.LinkWayTurn;
 import ru.o2genum.coregame.framework.Input.KeyEvent;
 import ru.o2genum.coregame.framework.Input.TouchEvent;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.util.Log;
 
 /* I should have used pools for my objects not to make garbage
  * collector angry. As it freezes the game sometimes, 
@@ -207,7 +209,7 @@ public class LinkWorld {
 		LinkWay result = new LinkWay();
 
 		if (map.get(start).GetLinkItemType() == map.get(end).GetLinkItemType()) {
-			FindWay(start, end, result, 0, LinkWayTurn.none);
+			FindWay(start, end, result, -1, LinkWayTurn.none);
 		}
 
 		return result;
@@ -216,23 +218,37 @@ public class LinkWorld {
 	private boolean FindWay(Point start, Point end, LinkWay linkway,
 			int turnCount, LinkWayTurn wayTurn) {
 		linkway.AddPointToEnd(start);
-		if (start.x == end.x && start.y == end.y) {
-			return true;
-		}
 
-		if (map.containsKey(start) && wayTurn != LinkWayTurn.none) {
-			linkway.RemovePointFromEnd();
-			return false;
+		Iterator<Point> iterator = linkway.getWayPoint().iterator();
+		String pointStr = "";
+		
+		
+		while(iterator.hasNext())
+		{
+			Point point = iterator.next();
+			pointStr+= " <" + point.x + ", " + point.y + ">"; 
 		}
 
 		if (turnCount > 2) {
 			linkway.RemovePointFromEnd();
+			Log.i("FindWay", " turnCount > 2, around: " +wayTurn.toString() +  pointStr);
 			return false;
+		}
+
+		if (start.x == end.x && start.y == end.y) {
+			return true;
 		}
 
 		if (start.x < -1 || start.x > Utility._horizontalLinkItemCount + 1
 				|| start.y < -1 || start.y > Utility._verticalLinkItemCount + 1) {
 			linkway.RemovePointFromEnd();
+			Log.i("FindWay", "Out Range aroundcout = "+ turnCount +" around: " +wayTurn.toString()+ pointStr);
+			return false;
+		}
+
+		if (map.containsKey(start) && wayTurn != LinkWayTurn.none) {
+			linkway.RemovePointFromEnd();
+			Log.i("FindWay", "Not Match aroundcout = "+ turnCount +" around: " +wayTurn.toString()+ pointStr);
 			return false;
 		}
 
@@ -244,26 +260,7 @@ public class LinkWorld {
 			if (FindWay(next, end, linkway,
 					wayTurn == LinkWayTurn.up ? turnCount : turnCount + 1,
 					LinkWayTurn.up)) {
-				return true;
-			}
-		}
-
-		if (wayTurn != LinkWayTurn.up) {
-			next = GenerateNextPoint(start, LinkWayTurn.down);
-
-			if (FindWay(next, end, linkway,
-					wayTurn == LinkWayTurn.down ? turnCount : turnCount + 1,
-					LinkWayTurn.down)) {
-				return true;
-			}
-		}
-
-		if (wayTurn != LinkWayTurn.right) {
-
-			next = GenerateNextPoint(start, LinkWayTurn.left);
-			if (FindWay(next, end, linkway,
-					wayTurn == LinkWayTurn.left ? turnCount : turnCount + 1,
-					LinkWayTurn.left)) {
+				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
 				return true;
 			}
 		}
@@ -274,11 +271,35 @@ public class LinkWorld {
 			if (FindWay(next, end, linkway,
 					wayTurn == LinkWayTurn.right ? turnCount : turnCount + 1,
 					LinkWayTurn.right)) {
+				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
 				return true;
 			}
 		}
-		linkway.RemovePointFromEnd();
+		if (wayTurn != LinkWayTurn.up) {
+			next = GenerateNextPoint(start, LinkWayTurn.down);
 
+			if (FindWay(next, end, linkway,
+					wayTurn == LinkWayTurn.down ? turnCount : turnCount + 1,
+					LinkWayTurn.down)) {
+				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
+				return true;
+			}
+		}
+
+		if (wayTurn != LinkWayTurn.right) {
+
+			next = GenerateNextPoint(start, LinkWayTurn.left);
+			if (FindWay(next, end, linkway,
+					wayTurn == LinkWayTurn.left ? turnCount : turnCount + 1,
+					LinkWayTurn.left)) {
+
+				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
+				return true;
+			}
+		}
+
+		linkway.RemovePointFromEnd();
+		Log.i("FindWay", "Return False aroundcout = "+ turnCount +" around: " +wayTurn.toString()+ pointStr);
 		return false;
 	}
 

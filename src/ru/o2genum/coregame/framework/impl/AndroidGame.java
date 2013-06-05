@@ -75,7 +75,9 @@ public abstract class AndroidGame extends Activity implements Game
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1009)); 
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1010)); 
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1011)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png0016)); 
 
+		
 		backgroud = BitmapFactory.decodeResource(this.getResources(),R.drawable.backgroud);
 		selectBackgroud = BitmapFactory.decodeResource(this.getResources(),R.drawable.selectbackground);
 	}

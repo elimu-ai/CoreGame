@@ -17,6 +17,11 @@ public class LinkWay {
 		_pointsOnWay =  new ArrayList<Point>();
 	}
 
+	public List<Point> getWayPoint()
+	{
+		return _pointsOnWay;
+	}
+	
 	public int getWaySize()
 	{
 		return _pointsOnWay.size();
