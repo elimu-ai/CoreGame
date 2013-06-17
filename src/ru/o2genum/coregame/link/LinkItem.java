@@ -1,10 +1,10 @@
-package ru.o2genum.coregame.framework.link;
+package ru.o2genum.coregame.link;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
-import ru.o2genum.coregame.framework.link.Utility.LinkItemType;
+import ru.o2genum.coregame.link.Utility.LinkItemType;
 
 public class LinkItem {
 

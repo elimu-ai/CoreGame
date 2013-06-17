@@ -3,6 +3,7 @@ package ru.o2genum.coregame.framework;
 import java.util.List;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 
 public interface Game
 {
@@ -24,7 +25,7 @@ public interface Game
 	
 	public List<Bitmap> getBitmap();
 	
-	public Bitmap getBackGroud();
+	public int getBackGroud();
 	
 	public Bitmap getSelectBackGroud();
 }

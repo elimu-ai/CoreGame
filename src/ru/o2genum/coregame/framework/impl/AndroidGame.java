@@ -5,22 +5,21 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
+import android.view.SurfaceView;
 import android.view.Window;
 import android.view.WindowManager;
 
 import ru.o2genum.coregame.R;
 import ru.o2genum.coregame.framework.*;
 
-public abstract class AndroidGame extends Activity implements Game
-{
+public abstract class AndroidGame extends Activity implements Game {
 	AndroidFastRenderView renderView;
 	Graphics graphics;
 	Audio audio;
@@ -29,106 +28,113 @@ public abstract class AndroidGame extends Activity implements Game
 	Vibration vibration;
 	Screen screen;
 	List<Bitmap> bitmaps;
-	Bitmap backgroud;
 	Bitmap selectBackgroud;
+	SurfaceView surfaceView;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
-		super.onCreate(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+    	super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
+
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		Bitmap frameBuffer = 
-			Bitmap.createBitmap(
-					getWindowManager().getDefaultDisplay().getWidth(),
-					getWindowManager().getDefaultDisplay().getHeight(),
-					Config.RGB_565);
+
+		int width = surfaceView.getWidth();
+		int height = surfaceView.getHeight();
+		Bitmap frameBuffer = Bitmap.createBitmap(getWindowManager()
+				.getDefaultDisplay().getWidth(), getWindowManager()
+				.getDefaultDisplay().getHeight(), Config.RGB_565);
 
 		InitBitmap();
-		renderView = new AndroidFastRenderView(this, frameBuffer);
+		renderView = new AndroidFastRenderView(surfaceView, this, frameBuffer);
 		graphics = new AndroidGraphics(frameBuffer);
 		fileIO = new AndroidFileIO(getAssets());
 		audio = new AndroidAudio(this);
-		input = new AndroidInput(this, renderView);
+		input = new AndroidInput(this, surfaceView);
 		vibration = new AndroidVibration(this);
 		screen = getStartScreen();
-		setContentView(renderView);
-		PowerManager powerManager = 
-			(PowerManager) getSystemService(Context.POWER_SERVICE);
+		// setContentView(surfaceView);
+		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 	}
 
-	private void InitBitmap()
-	{
+	private void InitBitmap() {
 		bitmaps = new ArrayList<Bitmap>();
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1001));
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1002)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1003)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1004)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1005)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1006)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1007)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1008)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1001));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1002));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1003));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1004));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1005));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1006));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1007));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1008));
 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1009)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1010)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png1011)); 
-		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),R.drawable.png0016)); 
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1009));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1010));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png1011));
+		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.png0016));
 
-		
-		backgroud = BitmapFactory.decodeResource(this.getResources(),R.drawable.backgroud);
-		selectBackgroud = BitmapFactory.decodeResource(this.getResources(),R.drawable.selectbackground);
+		selectBackgroud = BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.selectbackground);
 	}
-	
+
 	@Override
-	public void onResume()
-	{
+	public void onResume() {
 		super.onResume();
 		screen.resume();
 		renderView.resume();
 	}
 
 	@Override
-	public void onPause()
-	{
+	public void onPause() {
 		super.onPause();
 		renderView.pause();
 		screen.pause();
 
-		if(isFinishing())
+		if (isFinishing())
 			screen.dispose();
 	}
 
 	@Override
-	public Input getInput()
-	{
+	public Input getInput() {
 		return input;
 	}
 
 	@Override
-	public FileIO getFileIO()
-	{
+	public FileIO getFileIO() {
 		return fileIO;
 	}
 
 	@Override
-	public Graphics getGraphics()
-	{
+	public Graphics getGraphics() {
 		return graphics;
 	}
 
 	@Override
-	public Audio getAudio()
-	{
+	public Audio getAudio() {
 		return audio;
 	}
 
 	@Override
-	public void setScreen(Screen screen)
-	{
-		if(screen == null)
+	public void setScreen(Screen screen) {
+		if (screen == null)
 			throw new IllegalArgumentException("Screen must not be null");
 
 		this.screen.pause();
@@ -138,29 +144,24 @@ public abstract class AndroidGame extends Activity implements Game
 		this.screen = screen;
 	}
 
-	public Screen getCurrentScreen()
-	{
+	public Screen getCurrentScreen() {
 		return screen;
 	}
 
-	public Vibration getVibration()
-	{
+	public Vibration getVibration() {
 		return vibration;
 	}
-	
-	public List<Bitmap> getBitmap()
-	{
+
+	public List<Bitmap> getBitmap() {
 		return bitmaps;
 	}
-	
-	public Bitmap getBackGroud()
-	{
-		return backgroud;
+
+	public int getBackGroud() {
+		return this.getResources().getColor(R.color.backcolor);
+		// return Resources.getSystem().getColor(R.color.backcolor);
 	}
 
-	public Bitmap getSelectBackGroud()
-	{
+	public Bitmap getSelectBackGroud() {
 		return selectBackgroud;
 	}
 }
-	

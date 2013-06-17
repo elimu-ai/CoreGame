@@ -1,4 +1,4 @@
-package ru.o2genum.coregame.framework.link;
+package ru.o2genum.coregame.link;
 
 public class Utility {
 	public enum LinkItemType {

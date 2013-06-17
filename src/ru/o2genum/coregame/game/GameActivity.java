@@ -5,7 +5,7 @@ import android.graphics.*;
 
 import ru.o2genum.coregame.framework.*;
 import ru.o2genum.coregame.framework.impl.*;
-import ru.o2genum.coregame.framework.link.LinkGameScreen;
+import ru.o2genum.coregame.link.LinkGameScreen;
 
 public class GameActivity extends AndroidGame {
     @Override

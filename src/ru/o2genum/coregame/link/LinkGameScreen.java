@@ -1,4 +1,4 @@
-package ru.o2genum.coregame.framework.link;
+package ru.o2genum.coregame.link;
 
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -16,42 +16,42 @@ import ru.o2genum.coregame.framework.*;
 import ru.o2genum.coregame.R;
 
 public class LinkGameScreen extends Screen {
-    long startTime = System.nanoTime();
+	long startTime = System.nanoTime();
 	LinkWorld world;
 
 	Paint paint = new Paint();
 	RectF rect = new RectF();
 
 	Context r;
-        
-    public LinkGameScreen(Game game) {
-        super(game);
+
+	public LinkGameScreen(Game game) {
+		super(game);
 		r = (Context) game;
-		world = new LinkWorld(game);	
+		world = new LinkWorld(game);
 		world.renew();
 
 		paint.setAntiAlias(true);
 		paint.setStrokeWidth(0.0F);
-			
-		paint.setTextSize(((float)game.getGraphics().getHeight()) / 16F);
+
+		paint.setTextSize(((float) game.getGraphics().getHeight()) / 16F);
 		paint.setTextAlign(Paint.Align.CENTER);
-	
-    }
-    
-    @Override
-    public void update(float deltaTime) {
+
+	}
+
+	@Override
+	public void update(float deltaTime) {
 		world.update(deltaTime);
-    }
+	}
 
+	private Point selectedPoint;
 
-	private Point selectedPoint ;
-	
 	@Override
     public void present(float deltaTime) {
     Canvas c = game.getGraphics().getCanvas();    
 
 //	gradient.draw(c);
-	c.drawBitmap(game.getBackGroud(), null, new Rect(0,0,c.getWidth(),c.getHeight()), paint);
+    c.drawColor(game.getBackGroud());
+//    c.drawBitmap(game.getBackGroud(), null, new Rect(0,0,c.getWidth(),c.getHeight()), paint);
     paint.setStyle(Paint.Style.FILL_AND_STROKE);
 	
 	paint.setColor(0xff19dbe2);
@@ -98,38 +98,36 @@ public class LinkGameScreen extends Screen {
 				"\n\n" + r.getString(R.string.game_url), c);
 	}
 
-	private void drawMessage(String message, Canvas c)
-	{
+	private void drawMessage(String message, Canvas c) {
 		float y = paint.getTextSize();
-		for(String line: message.split("\n"))
-		{
-		// Draw black stroke
-		paint.setStrokeWidth(2F);
-		paint.setColor(0xff000000);
-	    paint.setStyle(Paint.Style.STROKE);
+		for (String line : message.split("\n")) {
+			// Draw black stroke
+			paint.setStrokeWidth(2F);
+			paint.setColor(0xff000000);
+			paint.setStyle(Paint.Style.STROKE);
 
-		c.drawText(line, c.getWidth()/2F, y, paint);
-		// Draw white text
-		paint.setStrokeWidth(0.0F);
-		paint.setColor(0xffffffff);
-	    paint.setStyle(Paint.Style.FILL);
+			c.drawText(line, c.getWidth() / 2F, y, paint);
+			// Draw white text
+			paint.setStrokeWidth(0.0F);
+			paint.setColor(0xffffffff);
+			paint.setStyle(Paint.Style.FILL);
 
-		c.drawText(line, c.getWidth()/2F, y, paint);
+			c.drawText(line, c.getWidth() / 2F, y, paint);
 
-		y += paint.getTextSize();
+			y += paint.getTextSize();
 		}
 	}
 
-    @Override
-    public void pause() {
+	@Override
+	public void pause() {
 		world.state = LinkWorld.GameState.Paused;
-    }
+	}
 
-    @Override
-    public void resume() {
-    }
+	@Override
+	public void resume() {
+	}
 
-    @Override
-    public void dispose() {
-    }            
+	@Override
+	public void dispose() {
+	}
 }

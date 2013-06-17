@@ -1,12 +1,12 @@
-package ru.o2genum.coregame.framework.link;
+package ru.o2genum.coregame.link;
 
 import java.util.*;
 
 import ru.o2genum.coregame.framework.*;
-import ru.o2genum.coregame.framework.link.Utility.LinkItemType;
-import ru.o2genum.coregame.framework.link.Utility.LinkWayTurn;
 import ru.o2genum.coregame.framework.Input.KeyEvent;
 import ru.o2genum.coregame.framework.Input.TouchEvent;
+import ru.o2genum.coregame.link.Utility.LinkItemType;
+import ru.o2genum.coregame.link.Utility.LinkWayTurn;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;

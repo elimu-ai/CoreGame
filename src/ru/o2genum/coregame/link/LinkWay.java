@@ -1,4 +1,4 @@
-package ru.o2genum.coregame.framework.link;
+package ru.o2genum.coregame.link;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

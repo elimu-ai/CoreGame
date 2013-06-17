@@ -4,7 +4,7 @@ import android.graphics.*;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class AndroidFastRenderView extends SurfaceView implements Runnable
+public class AndroidFastRenderView implements Runnable
 {
 	AndroidGame game;
 	Bitmap frameBuffer;
@@ -12,12 +12,12 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable
 	SurfaceHolder holder;
 	volatile boolean running = false;
 
-	public AndroidFastRenderView(AndroidGame game, Bitmap frameBuffer)
+	public AndroidFastRenderView(SurfaceView surfaceView,AndroidGame game, Bitmap frameBuffer)
 	{
-		super(game);
+		//super(game);
 		this.game = game;
 		this.frameBuffer = frameBuffer;
-		this.holder = getHolder();
+		this.holder = surfaceView.getHolder();
 		/*
 		 * From email by Fivos Asimakop:
 		 *
@@ -29,7 +29,7 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable
 		 * this in the SurfaceView that holds the canvas ( Not 100% sure about
 		 * that, I haven't worked with a Canvas yet ).
 		 */
-		setKeepScreenOn(true);
+		surfaceView.setKeepScreenOn(true);
 	}
 	
 	public void resume()
