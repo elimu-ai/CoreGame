@@ -39,7 +39,7 @@ public abstract class AndroidGame extends Activity implements Game {
 
     	super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
+		surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
