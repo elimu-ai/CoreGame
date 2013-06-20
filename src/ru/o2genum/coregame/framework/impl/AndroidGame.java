@@ -35,9 +35,10 @@ public abstract class AndroidGame extends Activity implements Game {
 	public void onCreate(Bundle savedInstanceState) {
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		super.onCreate(savedInstanceState);
 
-    	super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
 
@@ -59,7 +60,6 @@ public abstract class AndroidGame extends Activity implements Game {
 		input = new AndroidInput(this, surfaceView);
 		vibration = new AndroidVibration(this);
 		screen = getStartScreen();
-		// setContentView(surfaceView);
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 	}
 

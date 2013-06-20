@@ -10,7 +10,7 @@
         android:layout_gravity="center" >
 
         <SurfaceView
-            android:id="@+id/surfaceView"
+            android:id="@+id/surfaceView2"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_gravity="right|bottom" />
@@ -22,14 +22,12 @@
             android:layout_gravity="left|bottom"
             android:background="@drawable/refresh" />
 
-        <ru.o2genum.coregame.link.MyProgress
-            android:id="@+id/progressBar1"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="152dp"
-            android:layout_height="58dp"
+        <view
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
-            android:max="1000"
-            android:progress="300" />
+            class="ru.o2genum.coregame.link.MyProgress" />
 
         <Button
             android:id="@+id/button1"
