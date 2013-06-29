@@ -17,6 +17,10 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <color name="backcolor">#99CCFF</color>
-
+    <string name="refresh">刷新</string>
+    <string name="music_on">音乐(开)</string>
+    <string name="music_off">音乐(关)</string>
+    <string name="pause">暂停</string>
+    <string name="tip">提示</string>
+    <color name="backcolor">#99CCFC</color>
 </resources>

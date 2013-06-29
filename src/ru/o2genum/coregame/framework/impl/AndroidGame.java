@@ -13,8 +13,11 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.SurfaceView;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
 import ru.o2genum.coregame.R;
 import ru.o2genum.coregame.framework.*;
@@ -29,7 +32,13 @@ public abstract class AndroidGame extends Activity implements Game {
 	Screen screen;
 	List<Bitmap> bitmaps;
 	Bitmap selectBackgroud;
+	Bitmap wayPoint;
 	SurfaceView surfaceView;
+	Button btn_pause;
+	Button btn_music;
+	Button btn_refresh;
+	Button btn_tip;
+	ProgressBar progress_game;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +72,23 @@ public abstract class AndroidGame extends Activity implements Game {
 		PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 	}
 
+	private void InitControls() {
+		btn_music = (Button) findViewById(R.id.btn_music);
+		btn_pause = (Button) findViewById(R.id.btn_pause);
+		btn_refresh = (Button) findViewById(R.id.btn_refresh);
+		btn_tip = (Button) findViewById(R.id.btn_tip);
+		progress_game = (ProgressBar) findViewById(R.id.progress);
+
+		btn_music.setOnClickListener(new Button.OnClickListener() {
+			public void onClick(View v) {
+				test_getQuota();
+			}
+		});
+	}
+
+	private void test_getQuota() {
+	}
+
 	private void InitBitmap() {
 		bitmaps = new ArrayList<Bitmap>();
 		bitmaps.add(BitmapFactory.decodeResource(this.getResources(),
@@ -93,6 +119,8 @@ public abstract class AndroidGame extends Activity implements Game {
 
 		selectBackgroud = BitmapFactory.decodeResource(this.getResources(),
 				R.drawable.selectbackground);
+		wayPoint = BitmapFactory.decodeResource(this.getResources(),
+				R.drawable.point);
 	}
 
 	@Override
@@ -163,5 +191,14 @@ public abstract class AndroidGame extends Activity implements Game {
 
 	public Bitmap getSelectBackGroud() {
 		return selectBackgroud;
+	}
+
+	public Bitmap getWayPoint() {
+		return wayPoint;
+	}
+
+	private void btn_refresh_OnClick() {
+		progress_game.setMax(100);
+		progress_game.setProgress(10);
 	}
 }

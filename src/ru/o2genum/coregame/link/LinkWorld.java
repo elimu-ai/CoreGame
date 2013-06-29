@@ -77,7 +77,17 @@ public class LinkWorld {
 	}
 
 	private LinkItem previouseSelected;
+
+	public LinkItem getPreviouseSelected() {
+		return previouseSelected;
+	}
+
 	private LinkItem currectSelected;
+
+	public LinkItem getCurrectSelected() {
+		return currectSelected;
+	}
+
 	private LinkWay linkWay;
 
 	private void doInput() {
@@ -100,6 +110,8 @@ public class LinkWorld {
 					linkitem.isSelect = true;
 					if (previouseSelected == null) {
 						previouseSelected = linkitem;
+
+						coreHurt.play(4);
 					} else {
 						if (previouseSelected != null) {
 							linkWay = FindWay(previouseSelected.GetIndex(),
@@ -107,26 +119,41 @@ public class LinkWorld {
 						}
 						if (linkWay.getWaySize() >= 2) {
 							currectSelected = linkitem;
-						} else {
+
+						} else if (previouseSelected != linkitem) {
 							previouseSelected = linkitem;
+
+							coreHurt.play(4);
 						}
 					}
 				} else {
 					linkitem.isSelect = false;
 				}
 			}
+
 			if (linkWay != null && linkWay.getWaySize() >= 2) {
 				map.remove(previouseSelected.GetIndex());
 				map.remove(currectSelected.GetIndex());
 				previouseSelected = null;
 				currectSelected = null;
 				linkWay = null;
+				gameOver.play(4);
 			}
 
 			if (previouseSelected != null) {
 				previouseSelected.isSelect = true;
 			}
 		} else {
+		}
+	}
+
+	public void CleanLinkedPoint() {
+		if (linkWay != null && linkWay.getWaySize() >= 2) {
+			map.remove(previouseSelected.GetIndex());
+			map.remove(currectSelected.GetIndex());
+			previouseSelected = null;
+			currectSelected = null;
+			linkWay = null;
 		}
 	}
 
@@ -220,18 +247,13 @@ public class LinkWorld {
 		linkway.AddPointToEnd(start);
 
 		Iterator<Point> iterator = linkway.getWayPoint().iterator();
-		String pointStr = "";
-		
-		
-		while(iterator.hasNext())
-		{
+
+		while (iterator.hasNext()) {
 			Point point = iterator.next();
-			pointStr+= " <" + point.x + ", " + point.y + ">"; 
 		}
 
 		if (turnCount > 2) {
 			linkway.RemovePointFromEnd();
-			Log.i("FindWay", " turnCount > 2, around: " +wayTurn.toString() +  pointStr);
 			return false;
 		}
 
@@ -242,13 +264,11 @@ public class LinkWorld {
 		if (start.x < -1 || start.x > Utility._horizontalLinkItemCount + 1
 				|| start.y < -1 || start.y > Utility._verticalLinkItemCount + 1) {
 			linkway.RemovePointFromEnd();
-			Log.i("FindWay", "Out Range aroundcout = "+ turnCount +" around: " +wayTurn.toString()+ pointStr);
 			return false;
 		}
 
 		if (map.containsKey(start) && wayTurn != LinkWayTurn.none) {
 			linkway.RemovePointFromEnd();
-			Log.i("FindWay", "Not Match aroundcout = "+ turnCount +" around: " +wayTurn.toString()+ pointStr);
 			return false;
 		}
 
@@ -260,7 +280,6 @@ public class LinkWorld {
 			if (FindWay(next, end, linkway,
 					wayTurn == LinkWayTurn.up ? turnCount : turnCount + 1,
 					LinkWayTurn.up)) {
-				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
 				return true;
 			}
 		}
@@ -271,7 +290,6 @@ public class LinkWorld {
 			if (FindWay(next, end, linkway,
 					wayTurn == LinkWayTurn.right ? turnCount : turnCount + 1,
 					LinkWayTurn.right)) {
-				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
 				return true;
 			}
 		}
@@ -281,7 +299,6 @@ public class LinkWorld {
 			if (FindWay(next, end, linkway,
 					wayTurn == LinkWayTurn.down ? turnCount : turnCount + 1,
 					LinkWayTurn.down)) {
-				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
 				return true;
 			}
 		}
@@ -292,14 +309,11 @@ public class LinkWorld {
 			if (FindWay(next, end, linkway,
 					wayTurn == LinkWayTurn.left ? turnCount : turnCount + 1,
 					LinkWayTurn.left)) {
-
-				Log.i("FindWay","True Way " +"Count: " + turnCount +"  "+ pointStr);
 				return true;
 			}
 		}
 
 		linkway.RemovePointFromEnd();
-		Log.i("FindWay", "Return False aroundcout = "+ turnCount +" around: " +wayTurn.toString()+ pointStr);
 		return false;
 	}
 

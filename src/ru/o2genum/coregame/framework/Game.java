@@ -28,4 +28,6 @@ public interface Game
 	public int getBackGroud();
 	
 	public Bitmap getSelectBackGroud();
+	
+	public Bitmap getWayPoint();
 }

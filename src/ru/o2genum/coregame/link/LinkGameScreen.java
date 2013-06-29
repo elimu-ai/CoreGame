@@ -45,10 +45,14 @@ public class LinkGameScreen extends Screen {
 
 	private Point selectedPoint;
 
+	private float previouseTime = 0;
+
 	@Override
     public void present(float deltaTime) {
-    Canvas c = game.getGraphics().getCanvas();    
-
+	
+	previouseTime += deltaTime;
+	Canvas c = game.getGraphics().getCanvas();    
+    
 //	gradient.draw(c);
     c.drawColor(game.getBackGroud());
 //    c.drawBitmap(game.getBackGroud(), null, new Rect(0,0,c.getWidth(),c.getHeight()), paint);
@@ -64,6 +68,8 @@ public class LinkGameScreen extends Screen {
 	int bitmapWidth = (c.getWidth() - (Utility._borderEdge * 2 + (Utility._horizontalLinkItemCount - 1) * Utility._edge))/Utility._horizontalLinkItemCount;
 
 	Bitmap selectedBackGround= Bitmap.createScaledBitmap(game.getSelectBackGroud(),  bitmapWidth, bitmapWidth, true);
+	Bitmap pointBmp = Bitmap.createScaledBitmap(game.getWayPoint(),  bitmapWidth, bitmapWidth, true);
+	
 	while(iterator.hasNext())
 	{
 		LinkItem linkitem = iterator.next();
@@ -73,7 +79,7 @@ public class LinkGameScreen extends Screen {
 		int y = Utility._borderEdge + Utility._edge + (bitmapWidth + Utility._edge ) * linkitem.GetIndex().y;;
 		if(linkitem.isSelect)
 		{
-				c.drawBitmap(selectedBackGround, x,y, paint);
+			c.drawBitmap(selectedBackGround, x,y, paint);
 		}
 		
 		c.drawBitmap(bitmap ,x,y, paint);
@@ -82,7 +88,13 @@ public class LinkGameScreen extends Screen {
 	LinkWay linkWay = world.getLinkWay();
 	if(linkWay != null)
 	{
-		linkWay .DrawTheWay(c, paint, bitmapWidth);
+		linkWay .DrawTheWay(c, paint, bitmapWidth,pointBmp);
+	}
+	
+	if(previouseTime >= 1)
+	{
+		previouseTime = 0;
+		world.CleanLinkedPoint();
 	}
 	
 	if(world.state == LinkWorld.GameState.Running)
